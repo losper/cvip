@@ -21,5 +21,5 @@ add_library(cvip SHARED
 include_directories(${OpenCV_INCLUDE_DIRS})
 target_link_libraries(cvip ${OpenCV_LIBS})
 install(TARGETS cvip RUNTIME DESTINATION node_modules/cvip)
-install(DIRECTORY ${PROJECT_SOURCE_DIR}/modules/cvip/dist DESTINATION node_modules/cvip)
+install(DIRECTORY ${PROJECT_SOURCE_DIR}/modules/cvip/dist/ DESTINATION node_modules/cvip)
 # install(DIRECTORY ${PROJECT_SOURCE_DIR}/test/ DESTINATION test)
