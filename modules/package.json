@@ -1,0 +1,38 @@
+{
+	"name": "modules",
+	"version": "1.0.0",
+	"description": "",
+	"main": "lib/index.js",
+	"types": "lib/src/index.d.ts",
+	"scripts": {
+		"dev": "npm run clean && rollup -c rollup.dev.js && node copy",
+		"clean": "rimraf dist",
+		"build": "npm run clean && rollup -c",
+		"nyc_out": "rimraf .nyc_output && mkdirp .nyc_output",
+		"pretest": "node copy && npm run nyc_out && nyc instrument test dist/test && nyc instrument src dist/src && tsc",
+		"test": "passoa node_modules/tape/bin/tape dist/test/*.test.js",
+		"posttest": "nyc report --reporter=text --reporter=html"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"devDependencies": {
+		"rollup": "^1.16.7",
+		"rollup-plugin-commonjs": "^10.0.0",
+		"rollup-plugin-node-resolve": "^5.1.0",
+		"rollup-plugin-typescript2": "^0.22.1",
+		"@babel/core": "^7.5.5",
+		"@babel/preset-env": "^7.5.5",
+		"@passoa/tap": "^1.0.4",
+		"@types/mkdirp": "^0.5.2",
+		"@types/node": "^12.6.8",
+		"fs-extra": "^8.1.0",
+		"rimraf": "^2.6.3",
+		"typescript": "^3.5.3",
+		"@types/tape": "^4.2.33"
+	},
+	"nyc": {
+		"extension": [ ".ts", ".js" ],
+		"exclude": [ "**/*.d.ts" ]
+	}
+}
