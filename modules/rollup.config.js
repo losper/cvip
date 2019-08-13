@@ -32,6 +32,6 @@ export default [
 			resolve({ preferBuiltins: true }), // so Rollup can find `ms`
 			commonjs() // so Rollup can convert `ms` to an ES module
 		],
-		output: [ { file: '../output/node_modules/cvip/index.js', exports: 'named', format: 'cjs' } ]
+		output: [ { file: 'stage/index.js', exports: 'named', format: 'cjs' } ]
 	}
 ];
