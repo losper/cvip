@@ -11,3 +11,12 @@ steps:
    ls -la
    
   displayName: 'download opencv && build typescript'
+- task: GitHubRelease@0
+  inputs:
+    gitHubConnection: 'ga-connect'
+    repositoryName: '$(Build.Repository.Name)'
+    action: 'create'
+    target: '$(Build.SourceVersion)'
+    tagSource: 'auto'
+    releaseNotesFile: 'ChangeLog'
+    addChangeLog: false
