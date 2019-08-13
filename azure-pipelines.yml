@@ -11,11 +11,19 @@ steps:
    7z x opencv.7z -r -o./ -y
    
    ls -la
-   cd modules
-   npm install
-   npm run build
    
   displayName: 'download opencv && build typescript'
+
+- task: Npm@1
+  inputs:
+    command: 'install'
+    workingDir: 'modules'
+
+- task: Npm@1
+  inputs:
+    command: 'custom'
+    workingDir: 'modules'
+    customCommand: 'run build'
 
 - script: |
    cd build
