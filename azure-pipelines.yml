@@ -2,10 +2,6 @@
 # Start with a minimal pipeline that you can customize to build and deploy your code.
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
-trigger:
-  branches:
-    include:
-    - '*'  # must quote since "*" is a YAML reserved character; we want a string
 
 pool:
   name: Hosted VS2017
@@ -46,9 +42,12 @@ steps:
     archiveFile: '$(Build.ArtifactStagingDirectory)/cvip-msvc-$(Build.SourceBranchName).tar.gz'
 
 - task: GitHubRelease@0
-  displayName: 'GitHub release (create)'
   inputs:
     gitHubConnection: 'GitHub connection 1'
-    releaseNotesFile: ChangeLog
+    repositoryName: '$(Build.Repository.Name)'
+    action: 'create'
+    target: '$(Build.SourceVersion)'
+    tagSource: 'auto'
+    releaseNotesFile: 'ChangeLog'
     addChangeLog: false
   condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
