@@ -32,9 +32,8 @@ debug
 release
 output
 stage
-modules/coverage
-build/*
-!build/*.bat
+build/
+doc/_build/
 binary/
 !.gitignore
 !.projectile
@@ -50,3 +49,5 @@ GRTAGS
 dist
 Debug
 Release
+3rd
+src.

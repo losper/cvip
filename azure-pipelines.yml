@@ -3,49 +3,73 @@
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
 
+trigger:
+  batch: true
+  branches:
+    include:
+    - master
+    - refs/tags/v*
+pr:
+- master
+
+
 pool:
   name: Hosted VS2017
+
 steps:
+
 - script: |
-   curl -L -o opencv.7z https://github.com/losper/opencv/releases/download/v3.4.6/opencv-msvc-3.4.6.7z
-   7z x opencv.7z -r -o./ -y
-   ls -la
-   
-  displayName: 'download opencv && build typescript'
+    curl -o mingw32.7z -L http://downloads.sourceforge.net/mingw-w64/i686-8.1.0-release-posix-dwarf-rt_v6-rev0.7z
+    7z x mingw32.7z -y
+    npm install
+  displayName: 'install mingw32'
 
-- task: Npm@1
+- task: PowerShell@2
   inputs:
-    command: 'install'
-    workingDir: 'modules'
+    targetType: 'inline'
+    script: |
+      $env:Path="$pwd/mingw32/bin;C:\windows\system32;C:\windows;C:\windows\System32\Wbem;C:\Program Files\nodejs\;C:\npm\prefix;C:\Program Files\Git\mingw64\bin;C:\Program Files\CMake\bin;"
+      npm run windows_x86
+      rm dist/*.ilk
+      mv dist/libbt.pdb binary/libbt.pdb
+      ls dist
+  displayName: 'build windows_x86'
 
+- task: cURLUploader@2
+  displayName: 'Upload pdb'
+  inputs:
+    files: 'binary/libbt.pdb'
+    serviceEndpoint: 'csding.net'
+    remotePath: 'repertory/cxb/libbt.pdb?version=$(Build.SourceBranchName)-windows-x86'
+  condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/v'))
+
+- task: ArchiveFiles@2
+  displayName: 'Archive dist'
+  inputs:
+    rootFolderOrFile: dist
+    includeRootFolder: false
+    archiveType: tar
+    archiveFile: 'libbt.tar.gz'
+
+- task: cURLUploader@2
+  displayName: 'Upload libbt.passoa'
+  inputs:
+    files: 'libbt.tar.gz'
+    serviceEndpoint: 'csding.net'
+    remotePath: 'repertory/cxb/libbt.tar.gz?version=$(Build.SourceBranchName)-windows-x86'
+  condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/v'))
+  
 - task: Npm@1
   inputs:
     command: 'custom'
-    workingDir: 'modules'
+    workingDir: './'
     customCommand: 'run build'
-
-- script: |
-   cd build
-   cmake ../generate -G "Visual Studio 15 2017" -DCMAKE_TOOLCHAIN_FILE=../cmake/msvc.cmake -DCMAKE_INSTALL_PREFIX=../output/msvc -DOpenCV_DIR=d:/a/1/s/dist
-   cmake --build ./ --target install --config Release
-   
-  displayName: 'build c++ addon'
-
-- task: ArchiveFiles@2
-  displayName: 'Archive output/msvc'
+  condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/v'))
+  
+- task: Npm@1
   inputs:
-    rootFolderOrFile: output/msvc
-    includeRootFolder: false
-    archiveType: tar
-    archiveFile: '$(Build.ArtifactStagingDirectory)/cvip-msvc-$(Build.SourceBranchName).tar.gz'
-
-- task: GitHubRelease@0
-  inputs:
-    gitHubConnection: 'ga-connect'
-    repositoryName: '$(Build.Repository.Name)'
-    action: 'create'
-    target: '$(Build.SourceVersion)'
-    tagSource: 'auto'
-    releaseNotesFile: 'ChangeLog'
-    addChangeLog: false
-  condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
+    command: 'publish'
+    workingDir: './'
+    customRegistry: 'useFeed'
+    publishEndpoint: 'npmjs.org'
+  condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/v'))
