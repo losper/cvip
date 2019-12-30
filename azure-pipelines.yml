@@ -9,6 +9,7 @@ trigger:
     include:
     - master
     - refs/tags/v*
+    - dev
 pr:
 - master
 
@@ -19,28 +20,26 @@ pool:
 steps:
 
 - script: |
-    curl -o mingw32.7z -L http://downloads.sourceforge.net/mingw-w64/i686-8.1.0-release-posix-dwarf-rt_v6-rev0.7z
-    7z x mingw32.7z -y
     npm install
-  displayName: 'install mingw32'
+  displayName: 'install npm submodules'
 
 - task: PowerShell@2
   inputs:
     targetType: 'inline'
     script: |
-      $env:Path="$pwd/mingw32/bin;C:\windows\system32;C:\windows;C:\windows\System32\Wbem;C:\Program Files\nodejs\;C:\npm\prefix;C:\Program Files\Git\mingw64\bin;C:\Program Files\CMake\bin;"
       npm run windows_x86
       rm dist/*.ilk
-      mv dist/libbt.pdb binary/libbt.pdb
+      rm dist/*d.dll
+      mv dist/cvip.pdb binary/cvip.pdb
       ls dist
   displayName: 'build windows_x86'
 
 - task: cURLUploader@2
   displayName: 'Upload pdb'
   inputs:
-    files: 'binary/libbt.pdb'
+    files: 'binary/cvip.pdb'
     serviceEndpoint: 'csding.net'
-    remotePath: 'repertory/cxb/libbt.pdb?version=$(Build.SourceBranchName)-windows-x86'
+    remotePath: 'repertory/cxb/cvip.pdb?version=$(Build.SourceBranchName)-windows-x86'
   condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/v'))
 
 - task: ArchiveFiles@2
@@ -49,14 +48,14 @@ steps:
     rootFolderOrFile: dist
     includeRootFolder: false
     archiveType: tar
-    archiveFile: 'libbt.tar.gz'
+    archiveFile: 'cvip.tar.gz'
 
 - task: cURLUploader@2
-  displayName: 'Upload libbt.passoa'
+  displayName: 'Upload cvip.passoa'
   inputs:
-    files: 'libbt.tar.gz'
+    files: 'cvip.tar.gz'
     serviceEndpoint: 'csding.net'
-    remotePath: 'repertory/cxb/libbt.tar.gz?version=$(Build.SourceBranchName)-windows-x86'
+    remotePath: 'repertory/cxb/cvip.tar.gz?version=$(Build.SourceBranchName)-windows-x86'
   condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/v'))
   
 - task: Npm@1
