@@ -1,6 +1,6 @@
 {
 	"name": "@passoa/cvip",
-	"version": "1.0.4",
+	"version": "1.0.5",
 	"description": "",
 	"main": "dist/index.js",
 	"types": "dist/src/index.d.ts",
@@ -39,7 +39,7 @@
 			"module_name": "cvip",
 			"module_path": "dist/",
 			"remote_path": "repertory/cxb/",
-			"package_name": "{module_name}.tar.gz?version=v1.0.0-{platform}-{arch}",
+			"package_name": "{module_name}.tar.gz?version=v1.0.4-{platform}-{arch}",
 			"host": "https://passoa-generic.pkg.coding.net"
 		},
 		"external": {
