@@ -1,6 +1,6 @@
 #include "binding.h"
-#include "cvip/cvip.h"
-#include "camera/camera.h"
+#include "cvip.h"
+#include "camera.h"
 #include <iostream>
 
 extern struct pa_plugin gp;

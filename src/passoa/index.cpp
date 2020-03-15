@@ -1,4 +1,4 @@
-#include "cvip/cv.h"
+#include "cv.h"
 #include "binding.h"
 #include <WinSock.h>
 #include <ws2bth.h>
