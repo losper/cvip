@@ -3,7 +3,7 @@ if ('win32' == process.platform) {
 } else {
 	process.env.Path = process.env.Path;
 }
-let cvip = require('./cvip.passoa');
+let cvip = require('./cvip.node');
 
 export class Camera {
 	private idx_: number;

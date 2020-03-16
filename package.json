@@ -8,19 +8,19 @@
 	"scripts": {
 		"install": "cxb -i",
 		"windows_x86": "cross-env build_type=RelWithDebInfo platform=windows arch=x86 cxb -b",
-		"node_x86": "cross-env build_type=RelWithDebInfo platform=node arch=x64 cxb -b",
-		"build": "rimraf lib && cross-env opt=build webpack",
-		"dev": "cross-env opt=dev webpack",
+		"node_x86": "cross-env build_type=RelWithDebInfo platform=node arch=x86 cxb -b",
+		"build": "rimraf lib && tsc -p src",
+		"dev": "tsc -w -p src",
 		"test": "node test/test.js",
 		"pretest": "npm run build"
 	},
 	"author": "",
 	"license": "ISC",
-	"dependencies": {
-		"node-addon-api": "^2.0.0"
-	},
+	"dependencies": {},
 	"devDependencies": {
-		"@passoa/cxb": "latest",
+		"node-addon-api": "^2.0.0",
+		"standard-version": "^7.1.0",
+		"@passoa/cxb": "^1.0.14",
 		"@passoa/tap": "^1.0.4",
 		"@types/mkdirp": "^0.5.2",
 		"@types/node": "^12.6.8",

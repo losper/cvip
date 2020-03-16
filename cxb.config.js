@@ -9,8 +9,8 @@ module.exports = (opts) => {
 			opencv: 'https://github.com/losper/opencv/releases/download/v3.4.6/opencv-msvc-3.4.6.zip'
 		},
 		build_cmd: {
-			windows_x86: [ `-DBT_APP=${module_name}` ],
-			node_x64: [ '-G', 'Visual Studio 15 2017 Win64', '-DNODE=1' ]
+			windows_x86: [ '-G', 'Visual Studio 14 2015' ],
+			node_x86: [ '-G', 'Visual Studio 14 2015', '-DNODE=1' ]
 		}
 	};
 	return config;

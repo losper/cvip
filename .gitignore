@@ -25,6 +25,7 @@
 *.orig
 *.pdf
 *.jpg
+*.png
 *.raw
 *.html
 \#*

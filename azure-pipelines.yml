@@ -27,31 +27,31 @@ steps:
   inputs:
     targetType: 'inline'
     script: |
-      npm run windows_x86
-      rm dist/*.ilk
-      rm dist/*d.dll
-      mv dist/cvip.pdb binary/cvip.pdb
-      ls dist
-  displayName: 'build windows_x86'
+      npm run node_x86
+      rm lib/*.ilk
+      rm lib/*d.dll
+      mv lib/cvip.pdb cvip.pdb
+      ls lib
+  displayName: 'build node_x86'
 
 - task: cURLUploader@2
   displayName: 'Upload pdb'
   inputs:
-    files: 'binary/cvip.pdb'
+    files: 'cvip.pdb'
     serviceEndpoint: 'csding.net'
-    remotePath: 'repertory/cxb/cvip.pdb?version=$(Build.SourceBranchName)-windows-x86'
+    remotePath: 'repertory/cxb/cvip.pdb?version=$(Build.SourceBranchName)-node-x86'
   condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/v'))
 
 - task: ArchiveFiles@2
-  displayName: 'Archive dist'
+  displayName: 'Archive lib'
   inputs:
-    rootFolderOrFile: dist
+    rootFolderOrFile: lib
     includeRootFolder: false
     archiveType: tar
     archiveFile: 'cvip.tar.gz'
 
 - task: cURLUploader@2
-  displayName: 'Upload cvip.passoa'
+  displayName: 'Upload cvip.node'
   inputs:
     files: 'cvip.tar.gz'
     serviceEndpoint: 'csding.net'

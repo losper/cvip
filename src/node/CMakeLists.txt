@@ -12,6 +12,8 @@ find_package(OpenCV 3 REQUIRED core highgui imgcodecs imgproc videoio)
 set(PROJECT_NAME cvip)
 add_library(${PROJECT_NAME} SHARED
 	index.cpp
+	cv.cpp
+	cvip.cpp
 	)
 # Include N-API wrappers
 execute_process(COMMAND node -p "require('node-addon-api').include"
@@ -20,6 +22,7 @@ execute_process(COMMAND node -p "require('node-addon-api').include"
         )
 string(REPLACE "\n" "" NODE_ADDON_API_DIR ${NODE_ADDON_API_DIR})
 string(REPLACE "\"" "" NODE_ADDON_API_DIR ${NODE_ADDON_API_DIR})
+message("test:" ${NODE_ADDON_API_DIR})
 target_include_directories(${PROJECT_NAME} PRIVATE ${NODE_ADDON_API_DIR} ${OpenCV_INCLUDE_DIRS} ${CMAKE_JS_INC})
 target_link_libraries(${PROJECT_NAME} ${OpenCV_LIBS} ${CMAKE_JS_LIB})
 
