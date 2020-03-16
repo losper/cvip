@@ -19,8 +19,17 @@ pool:
 
 steps:
 
-- script: |
-    npm install
+steps:
+- task: NodeTool@0
+  displayName: 'Use Node 12.16.1'
+  inputs:
+    versionSpec: 12.16.1
+    architecture: x86
+
+- task: Npm@1
+  inputs:
+    command: 'install'
+    workingDir: './'
   displayName: 'install npm submodules'
 
 - task: PowerShell@2
