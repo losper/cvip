@@ -11,8 +11,10 @@
 		"node_x86": "cross-env build_type=RelWithDebInfo platform=node arch=x86 cxb -b",
 		"build": "rimraf lib && tsc -p src",
 		"dev": "tsc -w -p src",
-		"test": "node test/test.js",
-		"pretest": "npm run build"
+		"pretest": "npm run build",
+		"patch": "standard-version -r patch",
+		"minor": "standard-version -r minor",
+		"major": "standard-version -r major"
 	},
 	"author": "",
 	"license": "ISC",
