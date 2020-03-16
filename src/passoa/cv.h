@@ -1,4 +1,4 @@
-#include "../plugin.h"
+#include "plugin.h"
 int stdev(pa_context* ctx);
 int absdiff(pa_context* ctx);
 int horizontal(pa_context* ctx);

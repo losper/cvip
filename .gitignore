@@ -25,6 +25,7 @@
 *.orig
 *.pdf
 *.jpg
+*.png
 *.raw
 *.html
 \#*
@@ -51,3 +52,4 @@ Debug
 Release
 3rd
 src.
+lib
