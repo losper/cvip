@@ -1,10 +1,14 @@
 {
 	"name": "@passoa/cvip",
-	"version": "1.0.5",
+	"version": "1.0.6",
 	"description": "",
 	"main": "lib/index.js",
 	"types": "lib/src/index.d.ts",
-	"files": [ "/lib/*.js", "/lib/*/*.d.ts", "/binding" ],
+	"files": [
+		"/lib/*.js",
+		"/lib/*/*.d.ts",
+		"/binding"
+	],
 	"scripts": {
 		"install": "cxb -i",
 		"windows_x86": "cross-env build_type=RelWithDebInfo platform=windows arch=x86 cxb -b",
