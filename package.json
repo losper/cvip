@@ -4,15 +4,12 @@
 	"description": "",
 	"main": "lib/index.js",
 	"types": "lib/src/index.d.ts",
-	"files": [
-		"/lib/*.js",
-		"/lib/*/*.d.ts",
-		"/binding"
-	],
+	"files": [ "/lib/*.js", "/lib/*/*.d.ts", "/binding" ],
 	"scripts": {
 		"install": "cxb -i",
 		"windows_x86": "cross-env build_type=RelWithDebInfo platform=windows arch=x86 cxb -b",
-		"node_x86": "cross-env build_type=RelWithDebInfo platform=node arch=x86 cxb -b",
+		"vc14_x64": "cross-env build_type=RelWithDebInfo platform=vc14 arch=x64 OPENCV_DIR=D:/dev/opencv4/opencv/build cxb -b",
+		"node_x64": "cross-env build_type=RelWithDebInfo platform=node arch=x64 OPENCV_DIR=c:/tools/opencv/build cxb -b",
 		"build": "rimraf lib && tsc -p src",
 		"dev": "tsc -w -p src",
 		"pretest": "npm run build",

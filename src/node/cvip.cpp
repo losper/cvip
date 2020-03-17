@@ -44,7 +44,7 @@ stPos cvipMatch(std::string src, std::string dst) {
     image.at<Vec3b>(0, 0)[0] = ~image.at<Vec3b>(0, 0)[0];
 
     cv::Mat result = cv::Mat(result_cols, result_rows, CV_32FC1);
-    cv::matchTemplate(image, templateImage, result, CV_TM_CCOEFF_NORMED);
+    cv::matchTemplate(image, templateImage, result, cv::TM_CCOEFF_NORMED);
 
     double minVal, maxVal;
     cv::Point minLoc, maxLoc, matchLoc;

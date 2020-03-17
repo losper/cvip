@@ -1,0 +1,12 @@
+steps:
+- script: |
+    echo %ChocolateyInstall%
+    choco install opencv
+    echo %OPENCV_DIR%
+    ls C:/tools/opencv/build
+  displayName: 'install opencv'
+
+- task: NodeTool@0
+  displayName: 'Use Node 12.16.1'
+  inputs:
+    versionSpec: 12.16.1
