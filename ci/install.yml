@@ -3,7 +3,7 @@ steps:
     echo %ChocolateyInstall%
     choco install opencv
     echo %OPENCV_DIR%
-    ls C:/tools/opencv/build
+    ls C:/tools/opencv/build/x64/vc15/bin
   displayName: 'install opencv'
 
 - task: NodeTool@0

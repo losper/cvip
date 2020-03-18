@@ -23,7 +23,7 @@
 	"devDependencies": {
 		"node-addon-api": "^2.0.0",
 		"standard-version": "^7.1.0",
-		"@passoa/cxb": "^1.0.15",
+		"@passoa/cxb": "^1.0.16",
 		"@passoa/tap": "^1.0.4",
 		"@types/mkdirp": "^0.5.2",
 		"@types/node": "^12.6.8",
