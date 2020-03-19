@@ -1,6 +1,11 @@
 pipeline {
     agent any
     stages {
+        stage('system name') {
+            steps{
+                sh "uname -a"
+            }
+        }
         // 需要检出代码后，才可以使用代码仓库内的 Dockerfile
         stage('Checkout') {
             steps {
@@ -21,7 +26,7 @@ pipeline {
                 stage('Test') {
                     steps {
                         sh 'node --version'
-                        sh 'svn --version'
+                        sh 'nvm use 12.16.1'
                     }
                 }
             }

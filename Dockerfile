@@ -1,3 +1,7 @@
-FROM node:7-alpine
+FROM jashook/vs2017-build-tools
 
-RUN apk add -U subversion
+RUN echo "hello world"
+
+RUN choco install opencv
+
+RUN dir c:/tools
