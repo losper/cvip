@@ -1,10 +1,14 @@
 {
 	"name": "@passoa/cvip",
-	"version": "1.0.8",
+	"version": "1.0.9",
 	"description": "",
 	"main": "lib/index.js",
 	"types": "lib/src/index.d.ts",
-	"files": [ "/lib/*.js", "/lib/*.d.ts", "/cxb.config.js" ],
+	"files": [
+		"/lib/*.js",
+		"/lib/*.d.ts",
+		"/cxb.config.js"
+	],
 	"scripts": {
 		"install": "cxb -i",
 		"msvc2017": "cross-env build_type=RelWithDebInfo OPENCV_DIR=C:/tools/opencv/build cxb -b",
