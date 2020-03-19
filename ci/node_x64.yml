@@ -16,13 +16,13 @@ steps:
       ls lib
   displayName: 'build node_x64'
 
-- task: cURLUploader@2
-  displayName: 'Upload pdb'
-  inputs:
-    files: 'cvip.pdb'
-    serviceEndpoint: 'csding.net'
-    remotePath: 'repertory/cxb/cvip.pdb?version=$(Build.SourceBranchName)-node-x64'
-  condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/v'))
+# - task: cURLUploader@2
+#   displayName: 'Upload pdb'
+#   inputs:
+#     files: 'cvip.pdb'
+#     serviceEndpoint: 'csding.net'
+#     remotePath: 'repertory/cxb/cvip.pdb?version=$(Build.SourceBranchName)-node-x64'
+#   condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/v'))
 
 - task: ArchiveFiles@2
   displayName: 'Archive lib'
@@ -32,13 +32,13 @@ steps:
     archiveType: tar
     archiveFile: 'cvip.tar.gz'
 
-- task: cURLUploader@2
-  displayName: 'Upload cvip.node'
-  inputs:
-    files: 'cvip.tar.gz'
-    serviceEndpoint: 'csding.net'
-    remotePath: 'repertory/cxb/cvip.tar.gz?version=$(Build.SourceBranchName)-node-x64'
-  condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/v'))
+# - task: cURLUploader@2
+#   displayName: 'Upload cvip.node'
+#   inputs:
+#     files: 'cvip.tar.gz'
+#     serviceEndpoint: 'csding.net'
+#     remotePath: 'repertory/cxb/cvip.tar.gz?version=$(Build.SourceBranchName)-node-x64'
+#   condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/v'))
   
 - task: Npm@1
   inputs:
@@ -47,10 +47,10 @@ steps:
     customCommand: 'run build'
   condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/v'))
   
-- task: Npm@1
-  inputs:
-    command: 'publish'
-    workingDir: './'
-    customRegistry: 'useFeed'
-    publishEndpoint: 'npmjs.org'
-  condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/v'))
+# - task: Npm@1
+#   inputs:
+#     command: 'publish'
+#     workingDir: './'
+#     customRegistry: 'useFeed'
+#     publishEndpoint: 'npmjs.org'
+#   condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/v'))

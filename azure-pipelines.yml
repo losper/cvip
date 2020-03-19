@@ -17,7 +17,7 @@ pr:
 
 
 jobs:
-  - job: build_x86
+  - job: build_x64
     pool:
       name: Hosted VS2017
     steps:
