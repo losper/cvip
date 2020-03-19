@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.10](https://github.com/pass0a/cvip/compare/v1.0.7...v1.0.10) (2020-03-19)
+
+
+### Bug Fixes
+
+*  不指定平台编译，方便根据当前平台选择不同的二进制包 ([59a2903](https://github.com/pass0a/cvip/commit/59a2903c8d45c318f42cc0eb4217592b9a4660e9))
+
+### [1.0.9](https://github.com/pass0a/cvip/compare/v1.0.7...v1.0.9) (2020-03-19)
+
+
+### Bug Fixes
+
+* 不指定平台编译，方便根据当前平台选择不同的二进制包 ([a9b3bb9](https://github.com/pass0a/cvip/commit/a9b3bb96aa5896864a34b969dd41e1cf1e3d74f8))
+
 ### [1.0.7](https://github.com/pass0a/cvip/compare/v1.0.6...v1.0.7) (2020-03-18)
 
 

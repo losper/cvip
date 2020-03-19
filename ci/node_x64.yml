@@ -9,19 +9,19 @@ steps:
   inputs:
     targetType: 'inline'
     script: |
-      npm run node_x64
+      npm run msvc2017
       rm lib/*.ilk
       rm lib/*d.dll
       mv lib/cvip.pdb cvip.pdb
       ls lib
-  displayName: 'build node_x64'
+  displayName: 'build windows_x64'
 
 - task: cURLUploader@2
   displayName: 'Upload pdb'
   inputs:
     files: 'cvip.pdb'
     serviceEndpoint: 'csding.net'
-    remotePath: 'repertory/cxb/cvip.pdb?version=$(Build.SourceBranchName)-node-x64'
+    remotePath: 'repertory/cxb/cvip.pdb?version=$(Build.SourceBranchName)-windows-x64'
   condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/v'))
 
 - task: ArchiveFiles@2
@@ -37,7 +37,7 @@ steps:
   inputs:
     files: 'cvip.tar.gz'
     serviceEndpoint: 'csding.net'
-    remotePath: 'repertory/cxb/cvip.tar.gz?version=$(Build.SourceBranchName)-node-x64'
+    remotePath: 'repertory/cxb/cvip.tar.gz?version=$(Build.SourceBranchName)-windows-x64'
   condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/v'))
   
 - task: Npm@1
