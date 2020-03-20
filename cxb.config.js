@@ -4,7 +4,7 @@ module.exports = (opts) => {
 	let config = {
 		module_name: module_name,
 		remote_path: 'repertory/cxb/',
-		package_name: `${module_name}.tar.gz?version=${opts.version}-${opts.platform}-${opts.arch}`,
+		package_name: `${module_name}.tar.gz?version=v${opts.version}-${opts.platform}-${opts.arch}`,
 		host: 'https://passoa-generic.pkg.coding.net',
 		external: {},
 		build_cmd: {
