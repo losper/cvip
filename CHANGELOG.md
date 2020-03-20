@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.10](https://github.com/pass0a/cvip/compare/v1.0.9...v1.0.10) (2020-03-20)
+
+
+### Bug Fixes
+
+* 修改远程下载的包版本包没有包含引导字符v的问题 ([fbe2ab5](https://github.com/pass0a/cvip/commit/fbe2ab519011d429bcb75ec3859dffc7a985c2f8))
+
 ### [1.0.9](https://github.com/pass0a/cvip/compare/v1.0.7...v1.0.9) (2020-03-19)
 
 
