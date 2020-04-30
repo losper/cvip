@@ -13,6 +13,7 @@ set(PROJECT_NAME cvip)
 add_library(${PROJECT_NAME} SHARED
 	index.cpp
 	cvip.cpp
+	camera.cpp
 	)
 # Include N-API wrappers
 execute_process(COMMAND node -p "require('node-addon-api').include"

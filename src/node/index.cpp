@@ -1,7 +1,6 @@
-#include <napi.h>
 #include "cvip.h"
 
-Napi::Object _cvipMatch(const Napi::CallbackInfo& info) {
+Value _cvipMatch(const Napi::CallbackInfo& info) {
     auto env = info.Env();
     auto obj = Napi::Object::New(env);
     stPos pos;
@@ -14,7 +13,7 @@ Napi::Object _cvipMatch(const Napi::CallbackInfo& info) {
     }
     return obj;
 }
-Napi::Number _cvipEncode(const Napi::CallbackInfo& info) {
+Value _cvipEncode(const Napi::CallbackInfo& info) {
     auto env = info.Env();
     int ret = -2;
     if (info[0].IsString() && info[1].IsString() && info[2].IsNumber()) {
@@ -22,7 +21,7 @@ Napi::Number _cvipEncode(const Napi::CallbackInfo& info) {
     }
     return Napi::Number::New(env, ret);
 }
-Napi::Number _cvipCut(const Napi::CallbackInfo& info) {
+Value _cvipCut(const Napi::CallbackInfo& info) {
     auto env = info.Env();
     int ret = -2;
     if (info[0].IsString() && info[1].IsString() && info[2].IsNumber() && info[3].IsNumber() && info[4].IsNumber() && info[5].IsNumber() && info[6].IsNumber()) {
@@ -30,6 +29,7 @@ Napi::Number _cvipCut(const Napi::CallbackInfo& info) {
     }
     return Napi::Number::New(env, ret);
 }
+
 Napi::Object Init(Napi::Env env, Napi::Object exports) {
     exports.Set(Napi::String::New(env, "jsCvipMatch"),
         Napi::Function::New(env, _cvipMatch));
@@ -37,7 +37,9 @@ Napi::Object Init(Napi::Env env, Napi::Object exports) {
         Napi::Function::New(env, _cvipEncode));
     exports.Set(Napi::String::New(env, "jsCvipCut"),
         Napi::Function::New(env, _cvipCut));
+    exports.Set(Napi::String::New(env, "jsCameraCount"),
+        Napi::Function::New(env, _cvipCameraCount));
     return exports;
 }
 
-NODE_API_MODULE(hello, Init)
+NODE_API_MODULE(cvip, Init)

@@ -43,6 +43,7 @@ binary/
 !.travis.yml
 !*.sh
 !.babelrc
+!test/test.jpg
 *node_modules*
 GTAGS
 GPATH
@@ -53,3 +54,4 @@ Release
 3rd
 src.
 lib
+tmp

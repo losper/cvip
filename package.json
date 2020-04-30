@@ -4,36 +4,37 @@
 	"description": "",
 	"main": "lib/index.js",
 	"types": "lib/src/index.d.ts",
-	"files": [
-		"/lib/*.js",
-		"/lib/*.d.ts",
-		"/cxb.config.js"
-	],
+	"files": [ "/lib/*.js", "/lib/*.d.ts", "/cxb.config.js" ],
 	"scripts": {
 		"install": "cxb -i",
 		"msvc2017": "cross-env build_type=RelWithDebInfo OPENCV_DIR=C:/tools/opencv/build cxb -b",
-		"msvc2015": "cross-env build_type=RelWithDebInfo platfor=vc14 OPENCV_DIR=D:/dev/opencv4/opencv/build cxb -b",
+		"msvc2015": "cross-env build_type=RelWithDebInfo platform=vc14 OPENCV_DIR=D:/dev/opencv4/opencv/build cxb -b",
 		"build": "rimraf lib && tsc -p src",
+		"example": "tsc -w -p example",
 		"dev": "tsc -w -p src",
-		"pretest": "npm run build",
+		"test": "cross-env platform=node arch=x86 jest ",
+		"test-ci": "jest --color -i --config jest.config.ci.js --coverage",
 		"patch": "standard-version -r patch",
 		"minor": "standard-version -r minor",
 		"major": "standard-version -r major"
 	},
 	"author": "",
 	"license": "ISC",
-	"dependencies": {},
+	"dependencies": {
+		"bindings": "^1.5.0",
+		"node-addon-api": "^2.0.0"
+	},
 	"devDependencies": {
-		"@passoa/cxb": "^1.0.17",
-		"@passoa/tap": "^1.0.4",
+		"@passoa/cxb": "^1.0.22",
+		"@types/jest": "^25.2.1",
 		"@types/mkdirp": "^0.5.2",
 		"@types/node": "^12.6.8",
-		"@types/tape": "^4.2.33",
 		"cross-env": "^5.2.0",
 		"fs-extra": "^8.1.0",
-		"node-addon-api": "^2.0.0",
 		"rimraf": "^2.6.3",
 		"standard-version": "^7.1.0",
+		"jest": "^25.3.1",
+		"ts-jest": "^25.3.1",
 		"typescript": "^3.5.3"
 	}
 }
