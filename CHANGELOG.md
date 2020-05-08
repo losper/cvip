@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.11](https://github.com/pass0a/cvip/compare/v1.0.10...v1.0.11) (2020-05-08)
+
+
+### Features
+
+* 增加多路摄像头的功能 ([8aa3660](https://github.com/pass0a/cvip/commit/8aa3660cc373e21eb13822906e21cbdcb3ac9bbf))
+
+
+### Bug Fixes
+
+* 修复压缩包文件错误的问题，修复opencv依赖dll没有拷贝的问题 ([0ada84c](https://github.com/pass0a/cvip/commit/0ada84c50db87a50e0ff18ad45de481fc322dd7e))
+* 修复在azurepipelines上无法编译通过的步骤，并增加单元测试报告 ([6a4a05e](https://github.com/pass0a/cvip/commit/6a4a05e7aa332d6151839f4e7225ded53bbf432e))
+* 增加camera功能，增加jest测试框架，更新cxb设置 ([6be8365](https://github.com/pass0a/cvip/commit/6be8365ce9366e97f76c7f103668c68b65578c3d))
+
 ### [1.0.10](https://github.com/pass0a/cvip/compare/v1.0.9...v1.0.10) (2020-03-20)
 
 
