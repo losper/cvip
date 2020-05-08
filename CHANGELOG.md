@@ -7,6 +7,14 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### Bug Fixes
 
+* 增加npm cache功能，更新cxb版本 ([01125d8](https://github.com/pass0a/cvip/commit/01125d8a32035ac17c652048b55ee58f80805de7))
+* 增加关闭摄像头的接口，并修复调用接口不一致的问题 ([4d4f288](https://github.com/pass0a/cvip/commit/4d4f28879936db29735fba148e98ed0fde9fa52d))
+
+### [1.0.12](https://github.com/pass0a/cvip/compare/v1.0.11...v1.0.12) (2020-05-08)
+
+
+### Bug Fixes
+
 * 增加npm cache功能，更新cxb版本 ([0a6c464](https://github.com/pass0a/cvip/commit/0a6c464448abfc56a178febd52ac8e81e629f8f4))
 * 增加关闭摄像头的接口，并修复调用接口不一致的问题 ([4d4f288](https://github.com/pass0a/cvip/commit/4d4f28879936db29735fba148e98ed0fde9fa52d))
 
