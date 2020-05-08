@@ -31,16 +31,18 @@ Value _cvipCut(const Napi::CallbackInfo& info) {
 }
 
 Napi::Object Init(Napi::Env env, Napi::Object exports) {
-    exports.Set(Napi::String::New(env, "jsCvipMatch"),
+    exports.Set(Napi::String::New(env, "cvipMatch"),
         Napi::Function::New(env, _cvipMatch));
-    exports.Set(Napi::String::New(env, "jsCvipEncode"),
+    exports.Set(Napi::String::New(env, "cvipEncode"),
         Napi::Function::New(env, _cvipEncode));
-    exports.Set(Napi::String::New(env, "jsCvipCut"),
+    exports.Set(Napi::String::New(env, "cvipCut"),
         Napi::Function::New(env, _cvipCut));
-    exports.Set(Napi::String::New(env, "jsCameraCount"),
+    exports.Set(Napi::String::New(env, "cameraCount"),
         Napi::Function::New(env, _cvipCameraCount));
     exports.Set(Napi::String::New(env, "cameraOpen"),
         Napi::Function::New(env, _cvipCameraOpen));
+    exports.Set(Napi::String::New(env, "cameraClose"),
+        Napi::Function::New(env, _cvipCameraClose));
     exports.Set(Napi::String::New(env, "cameraIsOpened"),
         Napi::Function::New(env, _cvipCamereIsOpened));
     exports.Set(Napi::String::New(env, "cameraRead"),

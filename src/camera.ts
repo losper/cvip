@@ -25,9 +25,10 @@ export class Camera extends Readable {
 			this.push(null);
 		}
 	}
-	_final() {
+	_destroy() {
 		bindings.cameraClose(this.inst);
 	}
+	_final() {}
 	get(prop_idx: number) {
 		return bindings.get(prop_idx);
 	}

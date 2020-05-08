@@ -4,13 +4,13 @@ export let jpeg = 1;
 export let webp = 64;
 export let png = 16;
 export function imageMatch(img: string, tmp: string): { valid: number; x: number; y: number; val: number } {
-	return bindings.jsCvipMatch(img, tmp);
+	return bindings.cvipMatch(img, tmp);
 }
 export function imageSave(tmp: string, sim: string, cvfmt: number): number {
-	return bindings.jsCvipEncode(tmp, sim, cvfmt);
+	return bindings.cvipEncode(tmp, sim, cvfmt);
 }
 export function imageCut(tmp: string, sim: string, cvfmt: number, x: number, y: number, w: number, h: number): number {
-	return bindings.jsCvipCut(tmp, sim, cvfmt, x, y, w, h);
+	return bindings.cvipCut(tmp, sim, cvfmt, x, y, w, h);
 }
 export function stdev() {
 	//return cvip.stdev.apply(this, arguments);

@@ -4,11 +4,7 @@
 	"description": "",
 	"main": "lib/index.js",
 	"types": "lib/src/index.d.ts",
-	"files": [
-		"/lib/*.js",
-		"/lib/*.d.ts",
-		"/cxb.config.js"
-	],
+	"files": [ "/lib/*.js", "/lib/*.d.ts", "/cxb.config.js" ],
 	"scripts": {
 		"install": "cxb -i",
 		"msvc2017": "cross-env build_type=RelWithDebInfo OPENCV_DIR=C:/tools/opencv/build cxb -b",
@@ -16,7 +12,7 @@
 		"build": "rimraf lib && tsc -p src",
 		"example": "tsc -w -p example",
 		"dev": "tsc -w -p src",
-		"test": "jest -t image ",
+		"test": "jest",
 		"test-ci": "jest  -t image --color -i --config jest.config.ci.js --coverage",
 		"patch": "standard-version -r patch",
 		"minor": "standard-version -r minor",

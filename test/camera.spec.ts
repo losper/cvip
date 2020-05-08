@@ -1,24 +1,48 @@
-import * as cvip from '../src/index';
+import { Camera } from '../src/index';
 import { join } from 'path';
+import { accessSync, F_OK } from 'fs-extra';
+import { resolve } from 'dns';
 
-
+function fsExistsSync(path) {
+	try {
+		accessSync(path, F_OK);
+	} catch (e) {
+		return false;
+	}
+	return true;
+}
 describe('cvip camera', () => {
-	test('camera', () => {
-		expect(cvip.Camera.count()).toBe(2);
-		
-		// let cam = new cvip.Camera();
-		// cam.on('error', (err) => {
-		// 	console.log(err);
-		// });
-		// cam.on('data', (data) => {
-		// 	console.log(data);
-		// });
-		// cam.push('hello');
-		// cam.push('world');
-		// cam.push('hello');
-		// cam.push('kity');
-		// cam.open(0);
-		// cam.start();
-		// cam.stop();
-	});
+	test(
+		'camera',
+		async () => {
+			expect(Camera.count()).toBe(2);
+			await new Promise((resolve, reject) => {
+				let cap = new Camera(1, 'test0');
+				let cap1 = new Camera(0, 'test1');
+				//console.log(cap.take());
+				let idx = 0;
+				cap.on('data', (data) => {
+					//console.log('!!!:', data);
+					if (idx == 0) {
+						cap.startRecord(join(__dirname, 'test.avi'));
+					}
+					if (idx == 100) {
+						cap.stopRecord();
+					}
+					if (idx == 102) {
+						cap.destroy();
+						cap1.destroy();
+						expect(idx).toBeGreaterThan(100);
+						expect(fsExistsSync(join(__dirname, 'test.avi'))).toBe(true);
+						resolve(0);
+					}
+					idx++;
+				});
+				cap1.on('data', (data) => {
+					//console.log(data);
+				});
+			});
+		},
+		20000
+	);
 });

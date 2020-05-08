@@ -79,7 +79,10 @@ public:
         }
     }
     void close() {
+        _lock.lock();
         needClose = true; gp.release();
+        _cv.notify_one();
+        _lock.unlock();
     }
     void read() {
         _needRead++;
@@ -159,6 +162,18 @@ Value _cvipCameraOpen(const Napi::CallbackInfo& info) {
     }
     else {
         Napi::Error::New(env, "call cameraOpen by incorrect parameter").ThrowAsJavaScriptException();
+    }
+    return env.Undefined();
+}
+Value _cvipCameraClose(const Napi::CallbackInfo& info) {
+    auto env = info.Env();
+    bool ret = false;
+    if (info[0].IsExternal()) {
+        CameraWorker* wk = info[0].As<External<CameraWorker>>().Data();
+        if (glist.find(wk) != glist.end())
+        {
+            wk->close();
+        }
     }
     return env.Undefined();
 }

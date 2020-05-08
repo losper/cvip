@@ -18,5 +18,10 @@ async function main() {
 	cap1.on('data', (data) => {
 		//console.log(data);
 	});
+	setTimeout(() => {
+		console.log('destroy1!!');
+		cap.destroy();
+		cap1.destroy();
+	}, 10000);
 }
 main();
