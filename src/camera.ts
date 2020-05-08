@@ -10,7 +10,7 @@ export class Camera extends Readable {
 	constructor(idx: number, name: string) {
 		super({ objectMode: true });
 		this._name = name;
-		console.log('open:', this._name);
+
 		this.inst = bindings.cameraOpen(idx, name, (data: any) => {
 			if (this.isPaused()) this.emit('takephoto', data);
 			else {

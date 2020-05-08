@@ -12,6 +12,7 @@ steps:
       npm run msvc2017
       rm build/*.ilk
       rm build/*d.dll
+      rm build/*.pdb
       ls build
   displayName: 'build windows_x64'
 
@@ -37,10 +38,17 @@ steps:
 - task: ArchiveFiles@2
   displayName: 'Archive lib'
   inputs:
-    rootFolderOrFile: lib
+    rootFolderOrFile: build
     includeRootFolder: false
     archiveType: tar
-    archiveFile: 'cvip.tar.gz'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/cvip.tar.gz'
+
+- task: GitHubRelease@0
+  displayName: "GitHub release (create)"
+  inputs:
+    gitHubConnection: "ga-connect"
+    addChangeLog: false
+  condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/v'))
  
 - task: Npm@1
   inputs:
