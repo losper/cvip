@@ -13,9 +13,6 @@ trigger:
 pr:
 - master
 
-
-
-
 jobs:
   - job: build_x64
     pool:
@@ -23,3 +20,12 @@ jobs:
     steps:
       - template: ci/install.yml
       - template: ci/node_x64.yml
+
+variables:
+  # Used by chalk. Ensures output from Jest includes ANSI escape characters that are needed to match test snapshots.
+  FORCE_COLOR: 1
+
+  # Ensures the handful of tests that should be skipped during CI are
+  CI: true
+
+  npm_config_cache: $(Pipeline.Workspace)/.npm

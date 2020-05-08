@@ -12,8 +12,27 @@ steps:
       npm run msvc2017
       rm build/*.ilk
       rm build/*d.dll
-      ls lib
+      ls build
   displayName: 'build windows_x64'
+
+# Run test-ci-partial
+- script: npm run test-ci
+  displayName: 'Run tests'
+
+# Publish CI test results
+- task: PublishTestResults@2
+  inputs:
+    testResultsFiles: '$(System.DefaultWorkingDirectory)/reports/junit/*.xml'
+    testRunTitle: 'CI Tests $(Agent.OS)'
+  displayName: 'Publish test results'
+  condition: succeededOrFailed()
+  
+# Publish CI coverage
+- task: PublishCodeCoverageResults@1
+  inputs:
+    codeCoverageTool: Cobertura
+    summaryFileLocation: '$(System.DefaultWorkingDirectory)/reports/coverage/*coverage.xml'
+    condition: succeededOrFailed()
 
 - task: ArchiveFiles@2
   displayName: 'Archive lib'
