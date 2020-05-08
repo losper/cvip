@@ -1,9 +1,18 @@
 steps:
-- task: Npm@1
+# - task: Npm@1
+#   inputs:
+#     command: 'install'
+#     workingDir: './'
+#   displayName: 'install npm submodules'
+- task: Cache@2
   inputs:
-    command: 'install'
-    workingDir: './'
-  displayName: 'install npm submodules'
+    key: 'npm | "$(Agent.OS)" | package-lock.json'
+    restoreKeys: |
+      npm | "$(Agent.OS)"
+    path: $(npm_config_cache)
+  displayName: Cache npm
+
+- script: npm ci
 
 - task: PowerShell@2
   inputs:
@@ -39,7 +48,7 @@ steps:
   displayName: 'Archive lib'
   inputs:
     rootFolderOrFile: build
-    includeRootFolder: false
+    includeRootFolder: true
     archiveType: tar
     archiveFile: '$(Build.ArtifactStagingDirectory)/cvip.tar.gz'
 
