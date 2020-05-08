@@ -10,19 +10,10 @@ steps:
     targetType: 'inline'
     script: |
       npm run msvc2017
-      rm lib/*.ilk
-      rm lib/*d.dll
-      mv lib/cvip.pdb cvip.pdb
+      rm build/*.ilk
+      rm build/*d.dll
       ls lib
   displayName: 'build windows_x64'
-
-- task: cURLUploader@2
-  displayName: 'Upload pdb'
-  inputs:
-    files: 'cvip.pdb'
-    serviceEndpoint: 'csding.net'
-    remotePath: 'repertory/cxb/cvip.pdb?version=$(Build.SourceBranchName)-windows-x64'
-  condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/v'))
 
 - task: ArchiveFiles@2
   displayName: 'Archive lib'
@@ -31,15 +22,7 @@ steps:
     includeRootFolder: false
     archiveType: tar
     archiveFile: 'cvip.tar.gz'
-
-- task: cURLUploader@2
-  displayName: 'Upload cvip.node'
-  inputs:
-    files: 'cvip.tar.gz'
-    serviceEndpoint: 'csding.net'
-    remotePath: 'repertory/cxb/cvip.tar.gz?version=$(Build.SourceBranchName)-windows-x64'
-  condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/v'))
-  
+ 
 - task: Npm@1
   inputs:
     command: 'custom'

@@ -28,6 +28,7 @@ target_link_libraries(${PROJECT_NAME} ${OpenCV_LIBS} ${CMAKE_JS_LIB})
 
 if (CMAKE_BUILD_TYPE EQUAL "DEBUG")
         add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD 
+                COMMAND ${CMAKE_COMMAND} -E copy ${OpenCV_LIB_PATH}/../bin/opencv_world${OpenCV_VERSION_MAJOR}${OpenCV_VERSION_MINOR}${OpenCV_VERSION_PATCH}d.dll ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
                 COMMAND ${CMAKE_COMMAND} -E copy ${OpenCV_LIB_PATH}/../bin/opencv_world${OpenCV_VERSION_MAJOR}${OpenCV_VERSION_MINOR}${OpenCV_VERSION_PATCH}d.dll ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
 else() 
         add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD 

@@ -17,8 +17,8 @@ struct CamMsg {
 };
 class CameraWorker : public AsyncProgressWorker<CamMsg> {
 public:
-    CameraWorker(Function& callback, int idx)
-        : AsyncProgressWorker(callback), err(0), needClose(0) {
+    CameraWorker(Function& callback, int idx, string name)
+        : AsyncProgressWorker(callback), _needRead(0), _fps(20), _name(name), err(0), needClose(0) {
         gp.open(idx, CAP_DSHOW);
     }
 
@@ -28,20 +28,35 @@ public:
     // This code will be executed on the worker thread
     void Execute(const ExecutionProgress& progress) {
         // Need to simulate cpu heavy task
-        CamMsg msg;
+
         std::unique_lock<std::mutex> lock(_cvm);
         Mat frame;
+        double sleepTime = 1000 / (_fps > 10 ? _fps : 10);
         while (!needClose)
         {
-            _cv.wait(lock);
-            if (gp.read(frame)) {
-                msg.data = frame.data;
-                msg.len = frame.elemSize();
-                msg.rows = frame.rows;
-                msg.cols = frame.cols;
-                msg.type = frame.type();
-                progress.Send(&msg, 1);
+            if (_needRead > 0) {
+                _needRead--;
             }
+            else {
+                _needRead = 0;
+                _cv.wait(lock);
+            }
+            _lock.lock();
+            if (gp.read(frame)) {
+                imshow(_name, frame);
+                if (vw.isOpened()) {
+                    vw << frame;
+                }
+                waitKey(sleepTime);
+
+                _msg.data = frame.data;
+                _msg.len = frame.step[0] * frame.rows;;
+                _msg.rows = frame.rows;
+                _msg.cols = frame.cols;
+                _msg.type = frame.type();
+                progress.Send(&_msg, 1);
+            }
+            _lock.unlock();
         }
     }
     bool isOpened() {
@@ -55,21 +70,66 @@ public:
         if (msg && count) {
             if (count > 1) { printf("has more!!!!"); }
             HandleScope scope(Env());
-            Callback().Call({ Buffer<uchar>::New(Env(),const_cast<uchar*>(msg->data),msg->len) });
+            auto obj = Object::New(Env());
+            obj.Set("data", Buffer<uchar>::New(Env(), const_cast<uchar*>(msg->data), msg->len));
+            obj.Set("height", Number::New(Env(), msg->rows));
+            obj.Set("width", Number::New(Env(), msg->cols));
+            obj.Set("type", Number::New(Env(), msg->type));
+            Callback().Call({ obj });
         }
     }
     void close() {
         needClose = true; gp.release();
     }
     void read() {
+        _needRead++;
         _cv.notify_one();
+    }
+    void startRecord(string path) {
+        if (vw.isOpened())return;
+        _lock.lock();
+        int height = gp.get(cv::CAP_PROP_FRAME_HEIGHT);
+        int width = gp.get(cv::CAP_PROP_FRAME_WIDTH);
+        vw.open(path, VideoWriter::fourcc('D', 'I', 'V', 'X'), _fps, Size(width, height));
+        _saveAction = 1;
+        _lock.unlock();
+    }
+    void stopRecord() {
+        _lock.lock();
+        _saveAction = 0;
+        if (vw.isOpened()) {
+            vw.release();
+        }
+        _lock.unlock();
+    }
+    Value take() {
+        Mat frame;
+        _lock.lock();
+        bool ret = gp.read(frame);
+        _lock.unlock();
+        if (ret) {
+            auto obj = Object::New(Env());
+            obj.Set("data", Buffer<uchar>::Copy(Env(), const_cast<uchar*>(frame.data), frame.step[0] * frame.rows));
+            obj.Set("height", Number::New(Env(), frame.rows));
+            obj.Set("width", Number::New(Env(), frame.cols));
+            obj.Set("type", Number::New(Env(), frame.type()));
+            return obj;
+        }
+        return Env().Undefined();
     }
 private:
     VideoCapture gp;
+    VideoWriter vw;
     bool needClose;
     int err;
     std::condition_variable _cv;
     std::mutex _cvm;
+    std::mutex _lock;
+    CamMsg _msg;
+    string _name;
+    int _saveAction;
+    int _fps;
+    int _needRead;
 };
 std::set<CameraWorker*> glist;
 
@@ -89,10 +149,10 @@ int cvipGetCameraCount() {
 
 Value _cvipCameraOpen(const Napi::CallbackInfo& info) {
     auto env = info.Env();
-    if (info[0].IsNumber() && info[1].IsFunction()) {
+    if (info[0].IsNumber() && info[1].IsString() && info[2].IsFunction()) {
         int idx = info[0].ToNumber();
-        Function cb = info[1].As<Function>();
-        CameraWorker *wk = new CameraWorker(cb, idx);
+        Function cb = info[2].As<Function>();
+        CameraWorker *wk = new CameraWorker(cb, idx, info[1].ToString());
         wk->Queue();
         glist.insert(wk);
         return External<CameraWorker>::New(info.Env(), wk);
@@ -100,7 +160,7 @@ Value _cvipCameraOpen(const Napi::CallbackInfo& info) {
     else {
         Napi::Error::New(env, "call cameraOpen by incorrect parameter").ThrowAsJavaScriptException();
     }
-    return;
+    return env.Undefined();
 }
 Value _cvipCamereIsOpened(const Napi::CallbackInfo& info) {
     auto env = info.Env();
@@ -110,6 +170,48 @@ Value _cvipCamereIsOpened(const Napi::CallbackInfo& info) {
         if (glist.find(wk) != glist.end())ret = wk->isOpened();
     }
     return Napi::Boolean::New(env, ret);
+}
+
+Value _cvipCamereRead(const Napi::CallbackInfo& info) {
+    auto env = info.Env();
+    bool ret = false;
+    if (info[0].IsExternal()) {
+        CameraWorker* wk = info[0].As<External<CameraWorker>>().Data();
+        if (glist.find(wk) != glist.end())
+        {
+            wk->read();
+        }
+    }
+    return env.Undefined();
+}
+Value _cvipCamereTake(const Napi::CallbackInfo& info) {
+    auto env = info.Env();
+    bool ret = false;
+    if (info[0].IsExternal()) {
+        CameraWorker* wk = info[0].As<External<CameraWorker>>().Data();
+        if (glist.find(wk) != glist.end())
+        {
+            return wk->take();
+        }
+    }
+    return env.Undefined();
+}
+Value _cvipCamereRecord(const Napi::CallbackInfo& info) {
+    auto env = info.Env();
+    bool ret = false;
+    if (info[0].IsExternal()) {
+        CameraWorker* wk = info[0].As<External<CameraWorker>>().Data();
+        if (glist.find(wk) != glist.end())
+        {
+            if (info[1].IsString()) {
+                wk->startRecord(info[1].ToString());
+            }
+            else {
+                wk->stopRecord();
+            }
+        }
+    }
+    return env.Undefined();
 }
 
 Value _cvipCameraCount(const Napi::CallbackInfo& info) {

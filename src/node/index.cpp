@@ -39,6 +39,16 @@ Napi::Object Init(Napi::Env env, Napi::Object exports) {
         Napi::Function::New(env, _cvipCut));
     exports.Set(Napi::String::New(env, "jsCameraCount"),
         Napi::Function::New(env, _cvipCameraCount));
+    exports.Set(Napi::String::New(env, "cameraOpen"),
+        Napi::Function::New(env, _cvipCameraOpen));
+    exports.Set(Napi::String::New(env, "cameraIsOpened"),
+        Napi::Function::New(env, _cvipCamereIsOpened));
+    exports.Set(Napi::String::New(env, "cameraRead"),
+        Napi::Function::New(env, _cvipCamereRead));
+    exports.Set(Napi::String::New(env, "cameraTake"),
+        Napi::Function::New(env, _cvipCamereTake));
+    exports.Set(Napi::String::New(env, "cameraRecord"),
+        Napi::Function::New(env, _cvipCamereRecord));
     return exports;
 }
 
