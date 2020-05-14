@@ -1,6 +1,6 @@
 {
 	"name": "@passoa/cvip",
-	"version": "1.0.12",
+	"version": "1.0.13",
 	"description": "",
 	"main": "lib/index.js",
 	"types": "lib/src/index.d.ts",

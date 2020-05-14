@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.13](https://github.com/pass0a/cvip/compare/v1.0.12...v1.0.13) (2020-05-14)
+
+
+### Bug Fixes
+
+* 修改保存摄像头数据为图片文件，修改摄像头原始内容转换为jpg内容 ([fa42533](https://github.com/pass0a/cvip/commit/fa4253313987f053a277a362f3bd4a7ae907505b))
+
 ### [1.0.12](https://github.com/pass0a/cvip/compare/v1.0.11...v1.0.12) (2020-05-08)
 
 
