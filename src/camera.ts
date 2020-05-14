@@ -35,8 +35,8 @@ export class Camera extends Readable {
 	set(prop_idx: number, value: number) {
 		return bindings.set(prop_idx, value);
 	}
-	take() {
-		return bindings.cameraTake(this.inst);
+	take(path: string) {
+		return bindings.cameraTake(this.inst, path);
 	}
 	/*
 	CV_FOURCC('P', 'I', 'M', '1') = MPEG - 1 codec

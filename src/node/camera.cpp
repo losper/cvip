@@ -9,7 +9,7 @@ using namespace Napi;
 using namespace cv;
 using namespace std;
 struct CamMsg {
-    uchar* data;
+    vector<uchar> data;
     size_t len;
     int rows;
     int cols;
@@ -31,6 +31,7 @@ public:
 
         std::unique_lock<std::mutex> lock(_cvm);
         Mat frame;
+        vector<unsigned char> img_encode;
         double sleepTime = 1000 / (_fps > 10 ? _fps : 10);
         while (!needClose)
         {
@@ -43,13 +44,14 @@ public:
             }
             _lock.lock();
             if (gp.read(frame)) {
-                imshow(_name, frame);
+                //imshow(_name, frame);
                 if (vw.isOpened()) {
                     vw << frame;
                 }
                 waitKey(sleepTime);
 
-                _msg.data = frame.data;
+                cv::imencode(".jpg", frame, img_encode);
+                _msg.data = img_encode;
                 _msg.len = frame.step[0] * frame.rows;;
                 _msg.rows = frame.rows;
                 _msg.cols = frame.cols;
@@ -71,7 +73,7 @@ public:
             if (count > 1) { printf("has more!!!!"); }
             HandleScope scope(Env());
             auto obj = Object::New(Env());
-            obj.Set("data", Buffer<uchar>::New(Env(), const_cast<uchar*>(msg->data), msg->len));
+            obj.Set("data", Buffer<uchar>::New(Env(), const_cast<uchar*>(msg->data.data()), msg->data.size()));
             obj.Set("height", Number::New(Env(), msg->rows));
             obj.Set("width", Number::New(Env(), msg->cols));
             obj.Set("type", Number::New(Env(), msg->type));
@@ -80,7 +82,8 @@ public:
     }
     void close() {
         _lock.lock();
-        needClose = true; gp.release();
+        needClose = true;
+        gp.release();
         _cv.notify_one();
         _lock.unlock();
     }
@@ -105,18 +108,19 @@ public:
         }
         _lock.unlock();
     }
-    Value take() {
+    Value take(string path) {
         Mat frame;
         _lock.lock();
         bool ret = gp.read(frame);
         _lock.unlock();
         if (ret) {
-            auto obj = Object::New(Env());
+            /*auto obj = Object::New(Env());
             obj.Set("data", Buffer<uchar>::Copy(Env(), const_cast<uchar*>(frame.data), frame.step[0] * frame.rows));
             obj.Set("height", Number::New(Env(), frame.rows));
             obj.Set("width", Number::New(Env(), frame.cols));
             obj.Set("type", Number::New(Env(), frame.type()));
-            return obj;
+            return obj;*/
+            return Boolean::New(Env(), imwrite(path, frame));
         }
         return Env().Undefined();
     }
@@ -128,11 +132,11 @@ private:
     std::condition_variable _cv;
     std::mutex _cvm;
     std::mutex _lock;
-    CamMsg _msg;
     string _name;
     int _saveAction;
     int _fps;
     int _needRead;
+    CamMsg _msg;
 };
 std::set<CameraWorker*> glist;
 
@@ -202,11 +206,11 @@ Value _cvipCamereRead(const Napi::CallbackInfo& info) {
 Value _cvipCamereTake(const Napi::CallbackInfo& info) {
     auto env = info.Env();
     bool ret = false;
-    if (info[0].IsExternal()) {
+    if (info[0].IsExternal() && info[1].IsString()) {
         CameraWorker* wk = info[0].As<External<CameraWorker>>().Data();
         if (glist.find(wk) != glist.end())
         {
-            return wk->take();
+            return wk->take(info[1].ToString());
         }
     }
     return env.Undefined();

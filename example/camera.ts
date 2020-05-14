@@ -20,6 +20,7 @@ async function main() {
 	});
 	setTimeout(() => {
 		console.log('destroy1!!');
+		cap.take(join(__dirname, 'test.jpg'));
 		cap.destroy();
 		cap1.destroy();
 	}, 10000);
