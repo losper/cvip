@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.14](https://github.com/pass0a/cvip/compare/v1.0.13...v1.0.14) (2020-05-15)
+
+
+### Bug Fixes
+
+* 修复类型文件不匹配的问题，去掉摄像头命名，增加isOpened接口,并修改azurepipelines的编译流程 ([cccaf15](https://github.com/pass0a/cvip/commit/cccaf15a0b82a7b293f90dfcbcd5e344dcadc985))
+
 ### [1.0.13](https://github.com/pass0a/cvip/compare/v1.0.12...v1.0.13) (2020-05-14)
 
 
