@@ -17,8 +17,8 @@ struct CamMsg {
 };
 class CameraWorker : public AsyncProgressWorker<CamMsg> {
 public:
-    CameraWorker(Function& callback, int idx, string name)
-        : AsyncProgressWorker(callback), _needRead(0), _fps(20), _name(name), err(0), needClose(0) {
+    CameraWorker(Function& callback, int idx)
+        : AsyncProgressWorker(callback), _needRead(0), _fps(20), err(0), needClose(0) {
         gp.open(idx, CAP_DSHOW);
     }
 
@@ -156,13 +156,16 @@ int cvipGetCameraCount() {
 
 Value _cvipCameraOpen(const Napi::CallbackInfo& info) {
     auto env = info.Env();
-    if (info[0].IsNumber() && info[1].IsString() && info[2].IsFunction()) {
+    if (info[0].IsNumber() && info[1].IsFunction()) {
         int idx = info[0].ToNumber();
-        Function cb = info[2].As<Function>();
-        CameraWorker *wk = new CameraWorker(cb, idx, info[1].ToString());
-        wk->Queue();
-        glist.insert(wk);
-        return External<CameraWorker>::New(info.Env(), wk);
+        Function cb = info[1].As<Function>();
+        CameraWorker *wk = new CameraWorker(cb, idx);
+        if (wk->isOpened()) {
+            wk->Queue();
+            glist.insert(wk);
+            return External<CameraWorker>::New(info.Env(), wk);
+        }
+        delete wk;
     }
     else {
         Napi::Error::New(env, "call cameraOpen by incorrect parameter").ThrowAsJavaScriptException();

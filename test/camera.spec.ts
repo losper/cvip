@@ -17,9 +17,13 @@ describe('cvip camera', () => {
 		async () => {
 			expect(Camera.count()).toBe(2);
 			await new Promise((resolve, reject) => {
-				let cap = new Camera(1, 'test0');
-				let cap1 = new Camera(0, 'test1');
+				let cap = new Camera(0);
+				let cap1 = new Camera(1);
+				let cap2 = new Camera(2);
 				//console.log(cap.take());
+				expect(cap.isOpened()).toBe(true);
+				expect(cap1.isOpened()).toBe(true);
+				expect(cap2.isOpened()).toBe(false);
 				let idx = 0;
 				cap.on('data', (data) => {
 					//console.log('!!!:', data);

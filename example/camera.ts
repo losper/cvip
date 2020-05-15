@@ -1,8 +1,8 @@
 import { Camera } from '../src/index';
 import { join } from 'path';
 async function main() {
-	let cap = new Camera(1, 'test0');
-	let cap1 = new Camera(0, 'test1');
+	let cap = new Camera(1);
+	let cap1 = new Camera(0);
 	//console.log(cap.take());
 	let idx = 0;
 	cap.on('data', (data) => {

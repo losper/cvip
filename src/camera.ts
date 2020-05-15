@@ -3,15 +3,12 @@ import { Readable } from 'stream';
 
 export class Camera extends Readable {
 	private inst: any;
-	private _name: string;
 	// _write(chunk: any, encoding: string, callback: (error?: Error | null) => void) {
 	// 	callback();
 	// }
-	constructor(idx: number, name: string) {
+	constructor(idx: number) {
 		super({ objectMode: true });
-		this._name = name;
-
-		this.inst = bindings.cameraOpen(idx, name, (data: any) => {
+		this.inst = bindings.cameraOpen(idx, (data: any) => {
 			if (this.isPaused()) this.emit('takephoto', data);
 			else {
 				this.push(data);
@@ -56,5 +53,8 @@ export class Camera extends Readable {
 	}
 	static count() {
 		return bindings.cameraCount();
+	}
+	isOpened() {
+		return bindings.cameraIsOpened(this.inst);
 	}
 }
