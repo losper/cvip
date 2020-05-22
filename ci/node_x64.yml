@@ -45,7 +45,7 @@ steps:
     condition: succeededOrFailed()
 
 - task: ArchiveFiles@2
-  displayName: 'Archive lib'
+  displayName: 'Archive build'
   inputs:
     rootFolderOrFile: build
     includeRootFolder: true

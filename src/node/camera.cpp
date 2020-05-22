@@ -180,6 +180,7 @@ Value _cvipCameraClose(const Napi::CallbackInfo& info) {
         if (glist.find(wk) != glist.end())
         {
             wk->close();
+            glist.erase(wk);
         }
     }
     return env.Undefined();
